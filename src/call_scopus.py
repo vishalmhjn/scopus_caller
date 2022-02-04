@@ -79,7 +79,7 @@ if __name__ == "__main__":
     search_keywords = "\" AND \"".join(list(sys.argv[1:]))
     print('"'+search_keywords+'"')
     query = '?query=TITLE-ABS-KEY("'+search_keywords+'")'
-    query += '&date=1950-2020'
+    query += '&date=1950-2022'
     query += '&sort=relevance'
     query += '&start=0'
     r = requests.get(url + query, headers=headers)
