@@ -54,5 +54,5 @@ if __name__ == '__main__':
 		time.sleep(2)
 	df['abstract'] = list_abstracts
 	df['topics'] = list_topics
-	df.to_csv('../data/abstracts_semantics'+filename+'.csv', index=None)
+	df.to_csv('../data/abstracts_'+filename+'.csv', index=None)
 
