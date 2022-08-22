@@ -1,4 +1,3 @@
-# Author: Vishal Mahajan
 # This script is an enhancement from the initial notebook of Narayana Santhankrishnan.
 
 import os
