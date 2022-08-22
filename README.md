@@ -34,7 +34,7 @@ python call_semanticscholar.py path/to/acopus/results.csv output_filename
 
 ## Citing
 This is based on the base script [Scopus-Query](https://github.com/nsanthanakrishnan/Scopus-Query), so kindly cite:
-- Narayanan, S., & Antoniou, C. (2022). Electric cargo cycles - A comprehensive review. Transport Policy, 116 , 278–303. doi:10.1016/j.tranpol.2021.12.011. Link to the original repository: 
+- Narayanan, S., & Antoniou, C. (2022). Electric cargo cycles - A comprehensive review. Transport Policy, 116 , 278–303. doi:10.1016/j.tranpol.2021.12.011.
 
 Further, to see examples of how the keywords are used, kindly see and cite the supplementary material of the following publication:
-- Vishal Mahajan, Nico Kuehnel, Aikaterini Intzevidou, Guido Cantelmo, Rolf Moeckel & Constantinos Antoniou (2022) Data to the people: a review of public and proprietary data for transport models, Transport Reviews, 42:4, 415-440, DOI: 10.1080/01441647.2021.1977414
+- Vishal Mahajan, Nico Kuehnel, Aikaterini Intzevidou, Guido Cantelmo, Rolf Moeckel & Constantinos Antoniou (2022) Data to the people: a review of public and proprietary data for transport models, Transport Reviews, 42:4, 415-440, DOI: [10.1080/01441647.2021.1977414](https://www.tandfonline.com/doi/full/10.1080/01441647.2021.1977414?scroll=top&needAccess=true)
