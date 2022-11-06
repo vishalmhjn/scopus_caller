@@ -1,7 +1,7 @@
 # SCOPUS Caller 
 
 ### SCOPUS API
-SCOPUS API allows the users to query its database for all the articles based on a specified keyword(s). A user needs to create an account on SCOPUS using TUM ID and generate the SCOPUS key. The API specification can be seen at this link. Using this API, It is possible to retrieve title, authors, affiliation, DOI, etc of the scientific articles. Further, depending on the access level of the article and authorized API, the article's abstract-text can also be retrieved.
+SCOPUS API allows the users to query its database for all the articles based on a specified keyword(s). A user needs to create an account on SCOPUS using your university or personal account and generate the SCOPUS key. The API specification can be seen at this link. Using this API, It is possible to retrieve title, authors, affiliation, DOI, etc of the scientific articles. Further, depending on the access level of the article and authorized API, the article's abstract-text can also be retrieved.
 ### Semantic Scholar API
 Semantic Scholar also provides an API to retrieve the article's meta-data. It is possible to obtain abstracts by specifying the DOI of the article.
 ## Install the dependencies
@@ -24,13 +24,15 @@ python keyword_scrapper.py location_of_keywords.csv
 python call_scopus.py transportation "road safety" "machine learning"
 ```
 
-When a seacrh terms has a space ("machine learning"), use double quotations to enclose it (safety "machine learning")
+When a search terms has a space ("machine learning"), use double quotations to enclose it (safety "machine learning")
 
 For abstracts, you need to specify the output of previous step as input and then run the following
 ```sh
 python call_semanticscholar.py path/to/acopus/results.csv output_filename
 ```
 
+## Other settings
+You can change the specifics of the search in call_scopus such as ```CURRENT_YEAR```, or connecting string such as ```OR``` or ```AND```, etc.
 
 ## Citing
 This is based on the base script [Scopus-Query](https://github.com/nsanthanakrishnan/Scopus-Query), so kindly cite:
