@@ -1,10 +1,5 @@
 import requests
-import xml.etree.ElementTree as ET
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
 import pandas as pd
-import numpy as np
-import os
 import pickle
 import time
 import sys
@@ -78,9 +73,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     To quert scopus using API and cetrain keywords.
     This returns approximate matches with the keywords
     '''
-    print(FIRST_TERM)
-    print(SECOND_TERM)
-    
+
     API_KEY = open(API_FILE, 'r').readline().rstrip()
 
     X_ELS_APIKey = API_KEY  #API Key
@@ -116,7 +109,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
                 all_entries.extend(entries)
             else:
                 break
-    articles = pd.DataFrame()
+
     articles = create_article_dataframe(all_entries)
     articles.to_csv('../web_scrapped/Results_'+FIRST_TERM+'_'+SECOND_TERM+'.csv', sep=',', encoding='utf-8')
     print('Extraction for %s and %s completed' %(FIRST_TERM, SECOND_TERM))
@@ -124,9 +117,13 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
 
 if __name__ == "__main__":
 
+    print(KEYWORDS)
     keywords = pd.read_csv(KEYWORDS)
-    first_keywords = list(keywords['First term'])
-    second_keywords = list(keywords['Second term'])
+    print(keywords)
+    print(keywords.columns)
+
+    first_keywords = list(keywords['term1'])
+    second_keywords = list(keywords['term2'])
     second_keywords  = [x for x in second_keywords if str(x) != 'nan']
 
     # comment these if running all the new keywords
