@@ -91,6 +91,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     query += '&date=1950-2020'
     query += '&sort=relevance'
     query += '&start=0'
+    print(query)
     r = requests.get(url + query, headers=headers)
     result_len = int(r.json()['search-results']['opensearch:totalResults'])
     print(result_len)
@@ -124,9 +125,13 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
 
 if __name__ == "__main__":
 
+    print(KEYWORDS)
     keywords = pd.read_csv(KEYWORDS)
-    first_keywords = list(keywords['First term'])
-    second_keywords = list(keywords['Second term'])
+    print(keywords)
+    print(keywords.columns)
+
+    first_keywords = list(keywords['term1'])
+    second_keywords = list(keywords['term2'])
     second_keywords  = [x for x in second_keywords if str(x) != 'nan']
 
     # comment these if running all the new keywords
