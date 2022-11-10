@@ -1,10 +1,5 @@
 import requests
-import xml.etree.ElementTree as ET
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
 import pandas as pd
-import numpy as np
-import os
 import pickle
 import time
 import sys
@@ -78,9 +73,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     To quert scopus using API and cetrain keywords.
     This returns approximate matches with the keywords
     '''
-    print(FIRST_TERM)
-    print(SECOND_TERM)
-    
+
     API_KEY = open(API_FILE, 'r').readline().rstrip()
 
     X_ELS_APIKey = API_KEY  #API Key
@@ -91,7 +84,6 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     query += '&date=1950-2020'
     query += '&sort=relevance'
     query += '&start=0'
-    print(query)
     r = requests.get(url + query, headers=headers)
     result_len = int(r.json()['search-results']['opensearch:totalResults'])
     print(result_len)
@@ -117,7 +109,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
                 all_entries.extend(entries)
             else:
                 break
-    articles = pd.DataFrame()
+
     articles = create_article_dataframe(all_entries)
     articles.to_csv('../web_scrapped/Results_'+FIRST_TERM+'_'+SECOND_TERM+'.csv', sep=',', encoding='utf-8')
     print('Extraction for %s and %s completed' %(FIRST_TERM, SECOND_TERM))
