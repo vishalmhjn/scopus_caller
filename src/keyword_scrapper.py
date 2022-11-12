@@ -81,7 +81,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     headers = {'X-ELS-APIKey': X_ELS_APIKey}
 
     query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' #Enter the keyword inside the double quotations for approximate phrase match
-    query += '&date=1950-2020'
+    query += '&date=1950-'+str(CURRENT_YEAR)
     query += '&sort=relevance'
     query += '&start=0'
     r = requests.get(url + query, headers=headers)
@@ -94,7 +94,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
             entries = []
             #query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
             query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' #Enter the keyword inside the double quotations for approximate phrase match
-            query += '&date=1950-2020'
+            query += '&date=1950-'+str(CURRENT_YEAR)
             query += '&sort=relevance'
             #query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += '&start=%d' % (start)
@@ -111,7 +111,7 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
                 break
 
     articles = create_article_dataframe(all_entries)
-    articles.to_csv('../web_scrapped/Results_'+FIRST_TERM+'_'+SECOND_TERM+'.csv', sep=',', encoding='utf-8')
+    articles.to_csv('../data/Results_'+FIRST_TERM+'_'+SECOND_TERM+'.csv', sep=',', encoding='utf-8')
     print('Extraction for %s and %s completed' %(FIRST_TERM, SECOND_TERM))
     return all_entries
 
@@ -122,13 +122,16 @@ if __name__ == "__main__":
     print(keywords)
     print(keywords.columns)
 
+    CURRENT_YEAR = 2022
+    print(f"Current year is set to {CURRENT_YEAR}")
+
     first_keywords = list(keywords['term1'])
     second_keywords = list(keywords['term2'])
     second_keywords  = [x for x in second_keywords if str(x) != 'nan']
 
     # comment these if running all the new keywords
-    #second_keywords = second_keywords[-1]
-    first_keywords = first_keywords[-1]
+    # second_keywords = second_keywords[-1]
+    # first_keywords = first_keywords[-1]
 
     # Store the resonses in a list to check for Abstract avaiability later
     entries_hrefs = []
@@ -144,6 +147,6 @@ if __name__ == "__main__":
     
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    with open('../web_scrapped/href_entries_pickle'+timestr, 'wb') as fp:
+    with open('../data/href_entries_pickle'+timestr, 'wb') as fp:
         pickle.dump(entries_hrefs, fp)
         print("Done")

@@ -75,7 +75,7 @@ The results of the query then land in the `scopus_caller/data` folder as csv fil
 python call_semanticscholar.py path/to/acopus/results.csv output_filename
 ```
 ## Using Keywords
-> Todo: make it work
+Here we read a set of keywords from a dataframe with two columns and then search exhaustively using combinations of the words from the first column with the words from the second column. This helps reduce the manual effort in case you have many words to search with. Currently, it is hard coded with a dataframe with two columns, but it can be made flexible. Please open a PR if someone is interested in doing this.
 
 In the `input/keywords.csv` add you two search terms and replace the placeholders.
 First make sure you are in the `scopus_caller/src` folder then run:
