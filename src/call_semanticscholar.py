@@ -21,9 +21,10 @@ def call_api(doi):
 
 
 if __name__ == '__main__':
-
-	filename = sys.argv[2]
+	
 	df = pd.read_csv('../data/'+sys.argv[1])
+	filename = sys.argv[2]
+	
 	print(len(df))
 	df = df[df.doi != "No Doi"]
 	print(len(df))

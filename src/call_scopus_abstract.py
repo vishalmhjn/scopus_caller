@@ -94,10 +94,10 @@ if __name__ == '__main__':
                 with open(FOLDER+f, 'rb') as fp:
                     entries_href.extend(pickle.load(fp))
     else:
-        with open('../web_scrapped/'+PICKLE_FILE, 'rb') as fp:
+        with open('../data/'+PICKLE_FILE, 'rb') as fp:
             entries_href.extend(pickle.load(fp))
 
     print('Links Read')
     abstract_text_hrefs = get_full_text_links(entries_href)
     df_abstract_text = abstract_dataframe(abstract_text_hrefs)
-    df_abstract_text.to_csv('../web_scrapped/abstracts_2201.csv', sep=',', encoding='utf-8')
+    df_abstract_text.to_csv('../data/abstracts_2201.csv', sep=',', encoding='utf-8')
