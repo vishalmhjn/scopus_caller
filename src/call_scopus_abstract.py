@@ -2,8 +2,6 @@ import requests
 import xml.etree.ElementTree as ET
 
 import json
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
 import pandas as pd
 import numpy as np
 import os, re, pickle, sys

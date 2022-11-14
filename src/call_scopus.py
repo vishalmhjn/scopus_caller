@@ -1,8 +1,6 @@
 # This script is an enhancement from the initial notebook of Narayana Santhankrishnan.
 
-import os
 import sys
-import numpy as np
 import pandas as pd
 import requests
 
