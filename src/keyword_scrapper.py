@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2021 Santhanakrishnan Narayanan
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 import requests
 import pandas as pd
 import pickle
@@ -80,7 +102,8 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     url = 'https://api.elsevier.com/content/search/scopus'
     headers = {'X-ELS-APIKey': X_ELS_APIKey}
 
-    query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' #Enter the keyword inside the double quotations for approximate phrase match
+    #Enter the keyword inside the double quotations for approximate phrase match
+    query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' 
     query += '&date=1950-'+str(CURRENT_YEAR)
     query += '&sort=relevance'
     query += '&start=0'
@@ -92,13 +115,15 @@ def query_scopus(FIRST_TERM, SECOND_TERM):
     for start in range(0, result_len, 25):
         if start < 5000: #Scopus throws an error above this value
             entries = []
-            #query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
-            query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' #Enter the keyword inside the double quotations for approximate phrase match
+            # Enter the keyword inside the braces for exact phrase match
+            # query = '?query={'+first_term+'}+AND+{'+second_term+'}' 
+            # Enter the keyword inside the double quotations for approximate phrase match
+            query = '?query=TITLE-ABS-KEY("'+FIRST_TERM+'"+AND+"'+SECOND_TERM+'")' 
             query += '&date=1950-'+str(CURRENT_YEAR)
             query += '&sort=relevance'
-            #query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
+            # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += '&start=%d' % (start)
-            #query += '&count=%d' % (count)
+            # query += '&count=%d' % (count)
             r = requests.get(url + query, headers=headers)
             if 'entry' in r.json()['search-results']:
                 if 'error' in r.json()['search-results']['entry'][0]:

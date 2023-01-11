@@ -67,13 +67,15 @@ python call_scopus.py transportation "road safety" "machine learning"
 
 When a search terms has a space ("machine learning"), use double quotations to enclose it (safety "machine learning")
 
+## Abstracts
 For abstracts, you need to specify the output of previous step as input and then run the following
-
-The results of the query then land in the `scopus_caller/data` folder as csv files.
 
 ```sh
 python call_semanticscholar.py path/to/scopus/results.csv output_filename
 ```
+The results of the query then land in the `scopus_caller/data` folder as csv files.
+
+Abstracts for all SCOPUS database articles are not available from Semantic Scholar database.
 ## Using Keywords
 Here we read a set of keywords from a dataframe with two columns and then search exhaustively using combinations of the words from the first column with the words from the second column. This helps reduce the manual effort in case you have many words to search with. Currently, it is hard coded with a dataframe with two columns, but it can be made flexible. Please open a PR if someone is interested in doing this.
 
