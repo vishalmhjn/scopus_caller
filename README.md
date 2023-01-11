@@ -96,7 +96,7 @@ This is based on the base script [Scopus-Query](https://github.com/nsanthanakris
 - Narayanan, S., & Antoniou, C. (2022). Electric cargo cycles - A comprehensive review. Transport Policy, 116 , 278–303.
   doi:10.1016/j.tranpol.2021.12.011.
 
-Further, to see examples of how the keywords are used, you may see the Supplementary information in the following publication. If you want to acknowledge the scrapping of abstracts, you may cite the following publication:
+Further, to see examples of how the keywords are used, you may see the Supplementary information in the following publication:
 
 - Vishal Mahajan, Nico Kuehnel, Aikaterini Intzevidou, Guido Cantelmo, Rolf Moeckel & Constantinos Antoniou (2022) Data
   to the people: a review of public and proprietary data for transport models, Transport Reviews, 42:4, 415-440,
