@@ -20,9 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
 import pandas as pd
 import requests
+import argparse
+from datetime import datetime
+
 
 API_FILE = "../input/API"
 
@@ -85,21 +87,43 @@ def create_article_dataframe(all_entries):
     articles['citations'] = publicationCitations
     return articles
 
+def get_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--year', default=-1, type=int,
+                        help='Year to search for in Scopus (default: current year)')
+    parser.add_argument('--api', default="", type=str,
+                        help='API key to use for Scopus (default: read from file)')
+    parser.add_argument('keywords', nargs='+',
+                        help='Keywords to search for in Scopus')
+    args = parser.parse_args()
+
+    # Get year
+    if args.year > 0:
+        year = args.year
+    else:
+        year = datetime.now().year
+
+    # Get API key
+    if args.api != "":
+        api_key = args.api
+    else:
+        api_key = open(API_FILE, 'r').readline().rstrip()
+
+    return year, api_key, args.keywords
+
 if __name__ == "__main__":
 
-    API_KEY = open(API_FILE, 'r').readline().rstrip()
-    CURRENT_YEAR = 2022
+    year, api_key, keywords = get_arguments()
 
-    print(f"Current year is set to {CURRENT_YEAR}")
+    print(f"Current year is set to {year}")
 
-    X_ELS_APIKey = API_KEY  # API Key
     url = 'https://api.elsevier.com/content/search/scopus'
-    headers = {'X-ELS-APIKey': X_ELS_APIKey}
+    headers = {'X-ELS-APIKey': api_key}
 
-    search_keywords = "\" AND \"".join(list(sys.argv[1:]))
-    print('"'+search_keywords+'"')
-    query = '?query=TITLE-ABS-KEY("'+search_keywords+'")'
-    query += '&date=1950-'+str(CURRENT_YEAR)
+    search_keywords = " AND ".join(f'"{w}"' for w in keywords)
+    print(search_keywords)
+    query = f'?query=TITLE-ABS-KEY({search_keywords})'
+    query += f'&date=1950-{year}'
     query += '&sort=relevance'
     query += '&start=0'
     r = requests.get(url + query, headers=headers)
@@ -112,9 +136,8 @@ if __name__ == "__main__":
             entries = []
             # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
             # Enter the keyword inside the double quotations for approximate phrase match
-            query = '?query=TITLE-ABS-KEY("'+search_keywords+'")'
-            query += '&date=1950-'+str(CURRENT_YEAR)
-            query += '&sort=relevance'
+            query = f'?query=TITLE-ABS-KEY({search_keywords})'
+            query += f'&date=1950-{year}&sort=relevance'
             # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += '&start=%d' % (start)
             #query += '&count=%d' % (count)
@@ -130,7 +153,7 @@ if __name__ == "__main__":
                 break
     articles = pd.DataFrame()
     articles = create_article_dataframe(all_entries)
-    file_name = "_".join(list(sys.argv[1:]))
-    articles.to_csv('../data/Results_'+str(file_name) +
-                    '.csv', sep=',', encoding='utf-8')
-    print('Extraction for %s completed' % ('"'+search_keywords+'"'))
+    file_name = "_".join(keywords)
+    articles.to_csv(f'../data/Results_{file_name}.csv',
+                    sep=',', encoding='utf-8')
+    print(f'Extraction for {keywords} completed')
