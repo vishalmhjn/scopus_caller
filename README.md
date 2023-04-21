@@ -55,17 +55,29 @@ touch input/API
 
 
 ## Unrestricted search using CLI
+
 First make sure you are in the `scopus_caller/src` folder then run:
 
 ```sh
-# SEARCH_TERMS must be replaced by the terms you are searching for separated by a space
-python call_scopus.py [SEARCH_TERMS]
-
-# See the following example
-python call_scopus.py transportation "road safety" "machine learning"
+python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
 ```
 
-When a search terms has a space ("machine learning"), use double quotations to enclose it (safety "machine learning")
+**Parameters**:  
+- `--year` (Optional):
+  The upper bound of publication year for searching. If not specified, the current year will be used.
+- `--api` (Optional):
+  The API key to use. If not specified, the API key in the `input/API` file will be used.
+- `SEARCH_TERMS`: The search terms to use.
+  Separate multiple search terms with spaces.
+  ❗ When a search term has a space (e.g., "machine learning"), use **double quotations** to enclose it (safety "machine learning")
+
+**Example**:
+
+The following command will search for articles with the search terms `transportation`, `road safety` and `machine learning` published before 2023 (inclusive). 
+
+```sh
+python call_scopus.py --year 2023 transportation "road safety" "machine learning"
+```
 
 ## Abstracts
 For abstracts, you need to specify the output of previous step as input and then run the following
@@ -88,8 +100,7 @@ python keyword_scrapper.py ../data/keywords.csv
 
 ## Other settings
 
-You can change the specifics of the search in call_scopus such as ```CURRENT_YEAR```, or connecting string such
-as ```OR``` or ```AND```, etc.
+You can change the specifics of the search in call_scopus such as connecting string by `OR` or `AND`, etc.
 
 ## Citing
 
