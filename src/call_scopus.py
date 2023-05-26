@@ -28,7 +28,7 @@ from datetime import datetime
 
 API_FILE = "../input/API"
 
-def create_article_dataframe(all_entries):
+def create_article_dataframe(allentries):
     'create data frame from the extracted json from API response'
     articles = pd.DataFrame(
         columns=['title', 'creator', 'publisher', 'date', 'doi', 'citations'])
@@ -39,7 +39,7 @@ def create_article_dataframe(all_entries):
     publicationDoi = []
     publicationCitations = []
 
-    for entry in all_entries:
+    for entry in allentries:
 
         if 'dc:title' in entry:
             title = entry['dc:title']
@@ -107,26 +107,26 @@ def get_arguments():
     if args.api != "":
         api_key = args.api
     else:
-        api_key = open(API_FILE, 'r').readline().rstrip()
+        api_key = open(API_FILE, 'rb').readline().rstrip()
 
     return year, api_key, args.keywords
 
 if __name__ == "__main__":
 
-    year, api_key, keywords = get_arguments()
+    YEAR, API_KEY, KEYWORDS = get_arguments()
 
-    print(f"Current year is set to {year}")
+    print(f"Current year is set to {YEAR}")
 
     url = 'https://api.elsevier.com/content/search/scopus'
-    headers = {'X-ELS-APIKey': api_key}
+    headers = {'X-ELS-APIKey': API_KEY}
 
-    search_keywords = " AND ".join(f'"{w}"' for w in keywords)
+    search_keywords = " AND ".join(f'"{w}"' for w in KEYWORDS)
     print(search_keywords)
     query = f'?query=TITLE-ABS-KEY({search_keywords})'
-    query += f'&date=1950-{year}'
+    query += f'&date=1950-{YEAR}'
     query += '&sort=relevance'
     query += '&start=0'
-    r = requests.get(url + query, headers=headers)
+    r = requests.get(url + query, headers=headers, timeout=20)
     result_len = int(r.json()['search-results']['opensearch:totalResults'])
     print(result_len)
     all_entries = []
@@ -137,11 +137,11 @@ if __name__ == "__main__":
             # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
             # Enter the keyword inside the double quotations for approximate phrase match
             query = f'?query=TITLE-ABS-KEY({search_keywords})'
-            query += f'&date=1950-{year}&sort=relevance'
+            query += f'&date=1950-{YEAR}&sort=relevance'
             # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += '&start=%d' % (start)
             #query += '&count=%d' % (count)
-            r = requests.get(url + query, headers=headers)
+            r = requests.get(url + query, headers=headers, timeout=30)
             if 'entry' in r.json()['search-results']:
                 if 'error' in r.json()['search-results']['entry'][0]:
                     continue
@@ -151,9 +151,9 @@ if __name__ == "__main__":
                 all_entries.extend(entries)
             else:
                 break
-    articles = pd.DataFrame()
-    articles = create_article_dataframe(all_entries)
-    file_name = "_".join(keywords)
-    articles.to_csv(f'../data/Results_{file_name}.csv',
+    articles_loaded = pd.DataFrame()
+    articles_loaded = create_article_dataframe(all_entries)
+    file_name = "_".join(KEYWORDS)
+    articles_loaded.to_csv(f'../data/Results_{file_name}.csv',
                     sep=',', encoding='utf-8')
-    print(f'Extraction for {keywords} completed')
+    print(f'Extraction for {KEYWORDS} completed')
