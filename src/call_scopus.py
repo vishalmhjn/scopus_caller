@@ -111,19 +111,13 @@ def get_arguments():
 
     return year, api_key, args.keywords
 
-if __name__ == "__main__":
-
-    YEAR, API_KEY, KEYWORDS = get_arguments()
-
-    print(f"Current year is set to {YEAR}")
-
+def wrapper(api_key, keywords, year):
     url = 'https://api.elsevier.com/content/search/scopus'
-    headers = {'X-ELS-APIKey': API_KEY}
-
-    search_keywords = " AND ".join(f'"{w}"' for w in KEYWORDS)
+    headers = {'X-ELS-APIKey': api_key}
+    search_keywords = " AND ".join(f'"{w}"' for w in keywords)
     print(search_keywords)
     query = f'?query=TITLE-ABS-KEY({search_keywords})'
-    query += f'&date=1950-{YEAR}'
+    query += f'&date=1950-{year}'
     query += '&sort=relevance'
     query += '&start=0'
     r = requests.get(url + query, headers=headers, timeout=20)
@@ -137,7 +131,7 @@ if __name__ == "__main__":
             # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
             # Enter the keyword inside the double quotations for approximate phrase match
             query = f'?query=TITLE-ABS-KEY({search_keywords})'
-            query += f'&date=1950-{YEAR}&sort=relevance'
+            query += f'&date=1950-{year}&sort=relevance'
             # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += '&start=%d' % (start)
             #query += '&count=%d' % (count)
@@ -153,7 +147,15 @@ if __name__ == "__main__":
                 break
     articles_loaded = pd.DataFrame()
     articles_loaded = create_article_dataframe(all_entries)
+    return articles_loaded
+
+if __name__ == "__main__":
+
+    YEAR, API_KEY, KEYWORDS = get_arguments()
+
+    print(f"Current year is set to {YEAR}")
     file_name = "_".join(KEYWORDS)
-    articles_loaded.to_csv(f'../data/Results_{file_name}.csv',
+    articles_extracted = wrapper(API_KEY, KEYWORDS, YEAR)
+    articles_extracted.to_csv(f'../data/Results_{file_name}.csv',
                     sep=',', encoding='utf-8')
     print(f'Extraction for {KEYWORDS} completed')
