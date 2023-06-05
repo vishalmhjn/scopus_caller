@@ -97,6 +97,7 @@ First make sure you are in the `scopus_caller/src` folder then run:
 ```sh
 python keyword_scrapper.py ../data/keywords.csv
 ```
+The terms in each column should be unique keywords and need not be repeated. There can different number of keywords in each column. This code will iterate over column 1 (outer loop) and then iterate over column 2 (innner loop).
 
 ## Other settings
 
