@@ -25,15 +25,20 @@ specifying the DOI of the article.
 
 ```sh
 # crate an environment called venv in this project
-python3 -m venv ./venv
+python3 -m venv ~/.scopus-caller
 # activate the environment
-source ./venv/bin/activate
+source ~/.scopus-caller/bin/activate
 ```
 
-2) Now install all the neccessary requirements for this project:
+2) Now install all the neccessary requirements for this project using one of the following two options:
 
 ```sh
 pip install -r requirements.txt
+```
+OR
+
+```sh
+make install
 ```
 
 ## Add the API_KEY
@@ -41,7 +46,7 @@ pip install -r requirements.txt
 1) create a new file for the api key:
 
 ```sh
-touch input/API   
+touch input/.API   
 ```
 
 2) If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to 
