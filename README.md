@@ -56,7 +56,7 @@ touch input/.API
    Carefully read and understand the "API
    SERVICE AGREEMENT" and "Text and Data Mining (TDM) Provisions", before using the API and the retrieved data. These
    will be presented to the user while generating the API.
-4) Paste your newly generated `api_key` to the created `API` file in the `input` folder _(input/API)_.
+4) Paste your newly generated `api_key` to the created `.API` file in the `input` folder _(input/.API)_.
 
 
 ## Unrestricted search using CLI
@@ -71,7 +71,7 @@ python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
 - `--year` (Optional):
   The upper bound of publication year for searching. If not specified, the current year will be used.
 - `--api` (Optional):
-  The API key to use. If not specified, the API key in the `input/API` file will be used.
+  The API key to use. If not specified, the API key in the `input/.API` file will be used.
 - `SEARCH_TERMS`: The search terms to use.
   Separate multiple search terms with spaces.
   ❗ When a search term has a space (e.g., "machine learning"), use **double quotations** to enclose it (safety "machine learning")
