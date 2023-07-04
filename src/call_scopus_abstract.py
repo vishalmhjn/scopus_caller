@@ -8,7 +8,7 @@ import os, re, pickle, sys
 
 # articles.StoreMagics.autorestore = True
 FOLDER = sys.argv[1]
-API_FILE = "../input/API"
+API_FILE = "../input/.API"
 READ_ALL = sys.argv[2]
 PICKLE_FILE = str(sys.argv[3])
 

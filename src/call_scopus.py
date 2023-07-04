@@ -26,7 +26,7 @@ import argparse
 from datetime import datetime
 
 
-API_FILE = "../input/API"
+API_FILE = "../input/.API"
 
 
 def create_article_dataframe(allentries):

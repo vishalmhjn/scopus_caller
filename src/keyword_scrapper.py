@@ -28,7 +28,7 @@ import sys
 
 # FIRST_TERM = os.environ.get("FIRST_TERM")
 # SECOND_TERM = os.environ.get("SECOND_TERM")
-API_FILE = "../input/API"
+API_FILE = "../input/.API"
 KEYWORDS = sys.argv[1]
 
 

@@ -1,5 +1,7 @@
 # SCOPUS Caller
-
+[![linux](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml)
+[![mac](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml)
+[![windows](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml)
 > ℹ️ _Scopus quickly finds relevant and authoritative research, identifies experts and provides access to reliable data,
 > metrics and analytical tools. Be confident in progressing research, teaching or research direction and priorities
 > — all from one database and with one subscription._
@@ -25,15 +27,20 @@ specifying the DOI of the article.
 
 ```sh
 # crate an environment called venv in this project
-python3 -m venv ./venv
+python3 -m venv ~/.scopus-caller
 # activate the environment
-source ./venv/bin/activate
+source ~/.scopus-caller/bin/activate
 ```
 
-2) Now install all the neccessary requirements for this project:
+2) Now install all the neccessary requirements for this project using one of the following two options:
 
 ```sh
 pip install -r requirements.txt
+```
+OR
+
+```sh
+make install
 ```
 
 ## Add the API_KEY
@@ -41,7 +48,7 @@ pip install -r requirements.txt
 1) create a new file for the api key:
 
 ```sh
-touch input/API   
+touch input/.API   
 ```
 
 2) If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to 
@@ -51,7 +58,7 @@ touch input/API
    Carefully read and understand the "API
    SERVICE AGREEMENT" and "Text and Data Mining (TDM) Provisions", before using the API and the retrieved data. These
    will be presented to the user while generating the API.
-4) Paste your newly generated `api_key` to the created `API` file in the `input` folder _(input/API)_.
+4) Paste your newly generated `api_key` to the created `.API` file in the `input` folder _(input/.API)_.
 
 
 ## Unrestricted search using CLI
@@ -66,7 +73,7 @@ python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
 - `--year` (Optional):
   The upper bound of publication year for searching. If not specified, the current year will be used.
 - `--api` (Optional):
-  The API key to use. If not specified, the API key in the `input/API` file will be used.
+  The API key to use. If not specified, the API key in the `input/.API` file will be used.
 - `SEARCH_TERMS`: The search terms to use.
   Separate multiple search terms with spaces.
   ❗ When a search term has a space (e.g., "machine learning"), use **double quotations** to enclose it (safety "machine learning")
@@ -97,6 +104,7 @@ First make sure you are in the `scopus_caller/src` folder then run:
 ```sh
 python keyword_scrapper.py ../data/keywords.csv
 ```
+The terms in each column should be unique keywords and need not be repeated. There can different number of keywords in each column. This code will iterate over column 1 (outer loop) and then iterate over column 2 (innner loop).
 
 ## Other settings
 
