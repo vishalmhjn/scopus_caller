@@ -1,7 +1,9 @@
 # SCOPUS Caller
+
 [![linux](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml)
 [![mac](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml)
 [![windows](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml)
+
 > ℹ️ _Scopus quickly finds relevant and authoritative research, identifies experts and provides access to reliable data,
 > metrics and analytical tools. Be confident in progressing research, teaching or research direction and priorities
 > — all from one database and with one subscription._
@@ -10,7 +12,7 @@
 
 _SCOPUS API_ allows the users to query its database for all the articles based on a specified keyword(s).  
 A user needs to create an account on [SCOPUS](https://www.elsevier.com/solutions/scopus) using your university or
-personal account and generate the SCOPUS key.   
+personal account and generate the SCOPUS key.  
 The API specification can be seen at this [link](https://github.com/ElsevierDev/elsapy). Using this API, It is possible
 to **retrieve title**,**authors**, **affiliation**, **DOI**, etc of the scientific articles. Further, depending on the
 access level of the article and authorized API, the article's **abstract-text** can also be retrieved.
@@ -22,44 +24,44 @@ specifying the DOI of the article.
 
 ## Install the dependencies
 
-1) Create a virtual environment to install all packages in and activate the environment:  
-   *(Make sure you are in the parrent folder of this project)*
+1. Create a virtual environment to install all packages in and activate the environment:  
+   _(Make sure you are in the parrent folder of this project)_
 
-```sh
-# crate an environment called venv in this project
-python3 -m venv ~/.scopus-caller
-# activate the environment
-source ~/.scopus-caller/bin/activate
-```
+   ```sh
+   # crate an environment called venv in this project
+   python3 -m venv ~/.scopus-caller
+   # activate the environment
+   source ~/.scopus-caller/bin/activate
+   ```
 
-2) Now install all the neccessary requirements for this project using one of the following two options:
+2. Now install all the neccessary requirements for this project using one of the following two options:
 
-```sh
-pip install -r requirements.txt
-```
-OR
+   ```sh
+   pip install -r requirements.txt
+   ```
 
-```sh
-make install
-```
+   OR
+
+   ```sh
+   make install
+   ```
 
 ## Add the API_KEY
 
-1) create a new file for the api key:
+1. Create a new file for the api key:
 
-```sh
-touch input/.API   
-```
+   ```sh
+   touch input/.API
+   ```
 
-2) If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to 
-  [SCOPUS](https://www.elsevier.com/solutions/scopus) and create a private account or one via your university.
-3) After being logged in, create a new API key [here](https://dev.elsevier.com/apikey/manage), name the label to your
-   likings and leave the website input field empty *(it is not important)*.  
+2. If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to
+   [SCOPUS](https://www.elsevier.com/solutions/scopus) and create a private account or one via your university.
+3. After being logged in, create a new API key [here](https://dev.elsevier.com/apikey/manage), name the label to your
+   likings and leave the website input field empty _(it is not important)_.  
    Carefully read and understand the "API
    SERVICE AGREEMENT" and "Text and Data Mining (TDM) Provisions", before using the API and the retrieved data. These
    will be presented to the user while generating the API.
-4) Paste your newly generated `api_key` to the created `.API` file in the `input` folder _(input/.API)_.
-
+4. Paste your newly generated `api_key` to the created `.API` file in the `input` folder _(input/.API)_.
 
 ## Unrestricted search using CLI
 
@@ -69,7 +71,8 @@ First make sure you are in the `scopus_caller/src` folder then run:
 python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
 ```
 
-**Parameters**:  
+**Parameters**:
+
 - `--year` (Optional):
   The upper bound of publication year for searching. If not specified, the current year will be used.
 - `--api` (Optional):
@@ -80,22 +83,26 @@ python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
 
 **Example**:
 
-The following command will search for articles with the search terms `transportation`, `road safety` and `machine learning` published before 2023 (inclusive). 
+The following command will search for articles with the search terms `transportation`, `road safety` and `machine learning` published before 2023 (inclusive).
 
 ```sh
 python call_scopus.py --year 2023 transportation "road safety" "machine learning"
 ```
 
 ## Abstracts
+
 For abstracts, you need to specify the output of previous step as input and then run the following
 
 ```sh
-python call_semanticscholar.py path/to/scopus/results.csv output_filename
+python call_semanticscholar.py path/to/scopus/results.csv
 ```
-The results of the query then land in the `scopus_caller/data` folder as csv files.
+
+The results of the query are stored in the `scopus_caller/data` folder as a csv file with prefix **abstract**, followed by the same name as input file.
 
 Abstracts for all SCOPUS database articles are not available from Semantic Scholar database.
+
 ## Using Keywords
+
 Here we read a set of keywords from a dataframe with two columns and then search exhaustively using combinations of the words from the first column with the words from the second column. This helps reduce the manual effort in case you have many words to search with. Currently, it is hard coded with a dataframe with two columns, but it can be made flexible. Please open a PR if someone is interested in doing this.
 
 In the `input/keywords.csv` add you two search terms and replace the placeholders.
@@ -104,6 +111,7 @@ First make sure you are in the `scopus_caller/src` folder then run:
 ```sh
 python keyword_scrapper.py ../data/keywords.csv
 ```
+
 The terms in each column should be unique keywords and need not be repeated. There can different number of keywords in each column. This code will iterate over column 1 (outer loop) and then iterate over column 2 (innner loop).
 
 ## Other settings
@@ -126,4 +134,3 @@ Further, to see examples of how the keywords are used, you may see the Supplemen
 ## License
 
 Distributed under the MIT License.
-
