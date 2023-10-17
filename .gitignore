@@ -132,6 +132,7 @@ dmypy.json
 # input data and models
 input/*
 data/*
+src/cache/*
 
 # exception to the rule
 !input/.gitkeep 

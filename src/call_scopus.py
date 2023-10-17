@@ -1,5 +1,4 @@
 # MIT License
-
 # Copyright (c) 2021 Santhanakrishnan Narayanan
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,12 +24,11 @@ import requests
 import argparse
 from datetime import datetime
 
-
 API_FILE = "../input/.API"
 
 
 def create_article_dataframe(allentries):
-    "create data frame from the extracted json from API response"
+    "create data frame from the extracted JSON from API response"
     articles = pd.DataFrame(
         columns=["title", "creator", "publisher", "date", "doi", "citations"]
     )
@@ -145,6 +143,7 @@ def wrapper(api_key, keywords, year):
             # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += "&start=%d" % (start)
             # query += '&count=%d' % (count)
+            
             r = requests.get(url + query, headers=headers, timeout=30)
             if "entry" in r.json()["search-results"]:
                 if "error" in r.json()["search-results"]["entry"][0]:
@@ -162,7 +161,6 @@ def wrapper(api_key, keywords, year):
 
 if __name__ == "__main__":
     YEAR, API_KEY, KEYWORDS = get_arguments()
-
     print(f"Current year is set to {YEAR}")
     file_name = "_".join(KEYWORDS)
     articles_extracted = wrapper(API_KEY, KEYWORDS, YEAR)
