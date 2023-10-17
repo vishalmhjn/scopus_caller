@@ -136,9 +136,14 @@ def wrapper(api_key, keywords, year):
     for start in range(0, result_len, 25):
         if start < 5000:  # Scopus throws an error above this value
             entries = []
+            # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
+            # Enter the keyword inside the double quotations for approximate phrase match
             query = f"?query=TITLE-ABS-KEY({search_keywords})"
             query += f"&date=1950-{year}&sort=relevance"
+            # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
             query += "&start=%d" % (start)
+            # query += '&count=%d' % (count)
+            
             r = requests.get(url + query, headers=headers, timeout=30)
             if "entry" in r.json()["search-results"]:
                 if "error" in r.json()["search-results"]["entry"][0]:

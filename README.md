@@ -1,5 +1,7 @@
 # SCOPUS Caller
-
+[![linux](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/main.yml)
+[![mac](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/mac.yml)
+[![windows](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml/badge.svg?branch=master&event=push)](https://github.com/vishalmhjn/scopus_caller/actions/workflows/windows.yml)
 > ℹ️ _Scopus quickly finds relevant and authoritative research, identifies experts and provides access to reliable data,
 > metrics and analytical tools. Be confident in progressing research, teaching or research direction and priorities
 > — all from one database and with one subscription._
