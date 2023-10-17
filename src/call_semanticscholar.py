@@ -1,11 +1,8 @@
 import aiohttp
 import asyncio
-import requests
 import sys
-import time
 import pandas as pd
 from random import choice
-from tqdm import tqdm
 
 desktop_agents = [""]
 BASE_API_URL = "http://api.semanticscholar.org/v1/paper/"

@@ -1,5 +1,4 @@
 # MIT License
-
 # Copyright (c) 2021 Santhanakrishnan Narayanan
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,13 +24,14 @@ import requests
 import argparse
 from datetime import datetime
 
-
 API_FILE = "../input/.API"
 
+
 def create_article_dataframe(allentries):
-    'create data frame from the extracted json from API response'
+    "create data frame from the extracted JSON from API response"
     articles = pd.DataFrame(
-        columns=['title', 'creator', 'publisher', 'date', 'doi', 'citations'])
+        columns=["title", "creator", "publisher", "date", "doi", "citations"]
+    )
     publicationTitle = []
     publicationAuthor = []
     publicationName = []
@@ -40,61 +40,68 @@ def create_article_dataframe(allentries):
     publicationCitations = []
 
     for entry in allentries:
-
-        if 'dc:title' in entry:
-            title = entry['dc:title']
+        if "dc:title" in entry:
+            title = entry["dc:title"]
             publicationTitle.append(title)
         else:
             print(entry)
             continue
 
-        if 'dc:creator' in entry:
-            author = entry['dc:creator']
+        if "dc:creator" in entry:
+            author = entry["dc:creator"]
             publicationAuthor.append(author)
         else:
-            author = 'No author'
+            author = "No author"
             publicationAuthor.append(author)
 
-        if 'prism:publicationName' in entry:
-            name = entry['prism:publicationName']
+        if "prism:publicationName" in entry:
+            name = entry["prism:publicationName"]
             publicationName.append(name)
         else:
-            name = 'No publication name'
+            name = "No publication name"
             publicationName.append(name)
 
-        date = entry['prism:coverDate']
+        date = entry["prism:coverDate"]
         publicationDate.append(date)
 
-        if 'prism:doi' in entry:
-            doi = entry['prism:doi']
+        if "prism:doi" in entry:
+            doi = entry["prism:doi"]
             publicationDoi.append(doi)
         else:
-            doi = 'No Doi'
+            doi = "No Doi"
             publicationDoi.append(doi)
 
-        if 'citedby-count' in entry:
-            citations = entry['citedby-count']
+        if "citedby-count" in entry:
+            citations = entry["citedby-count"]
             publicationCitations.append(citations)
         else:
-            citations = 'No data'
+            citations = "No data"
             publicationCitations.append(citations)
 
-    articles['title'] = publicationTitle
-    articles['creator'] = publicationAuthor
-    articles['publisher'] = publicationName
-    articles['date'] = publicationDate
-    articles['doi'] = publicationDoi
-    articles['citations'] = publicationCitations
+    articles["title"] = publicationTitle
+    articles["creator"] = publicationAuthor
+    articles["publisher"] = publicationName
+    articles["date"] = publicationDate
+    articles["doi"] = publicationDoi
+    articles["citations"] = publicationCitations
     return articles
+
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default=-1, type=int,
-                        help='Year to search for in Scopus (default: current year)')
-    parser.add_argument('--api', default="", type=str,
-                        help='API key to use for Scopus (default: read from file)')
-    parser.add_argument('keywords', nargs='+',
-                        help='Keywords to search for in Scopus')
+    parser.add_argument(
+        "--year",
+        default=-1,
+        type=int,
+        help="Year to search for in Scopus (default: current year)",
+    )
+    parser.add_argument(
+        "--api",
+        default="",
+        type=str,
+        help="API key to use for Scopus (default: read from file)",
+    )
+    parser.add_argument("keywords", nargs="+", help="Keywords to search for in Scopus")
     args = parser.parse_args()
 
     # Get year
@@ -107,40 +114,37 @@ def get_arguments():
     if args.api != "":
         api_key = args.api
     else:
-        api_key = open(API_FILE, 'rb').readline().rstrip()
+        api_key = open(API_FILE, "rb").readline().rstrip()
 
     return year, api_key, args.keywords
 
+
 def wrapper(api_key, keywords, year):
-    url = 'https://api.elsevier.com/content/search/scopus'
-    headers = {'X-ELS-APIKey': api_key}
+    url = "https://api.elsevier.com/content/search/scopus"
+    headers = {"X-ELS-APIKey": api_key}
     search_keywords = " AND ".join(f'"{w}"' for w in keywords)
     print(search_keywords)
-    query = f'?query=TITLE-ABS-KEY({search_keywords})'
-    query += f'&date=1950-{year}'
-    query += '&sort=relevance'
-    query += '&start=0'
+    query = f"?query=TITLE-ABS-KEY({search_keywords})"
+    query += f"&date=1950-{year}"
+    query += "&sort=relevance"
+    query += "&start=0"
     r = requests.get(url + query, headers=headers, timeout=20)
-    result_len = int(r.json()['search-results']['opensearch:totalResults'])
+    result_len = int(r.json()["search-results"]["opensearch:totalResults"])
     print(result_len)
     all_entries = []
 
     for start in range(0, result_len, 25):
         if start < 5000:  # Scopus throws an error above this value
             entries = []
-            # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
-            # Enter the keyword inside the double quotations for approximate phrase match
-            query = f'?query=TITLE-ABS-KEY({search_keywords})'
-            query += f'&date=1950-{year}&sort=relevance'
-            # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
-            query += '&start=%d' % (start)
-            #query += '&count=%d' % (count)
+            query = f"?query=TITLE-ABS-KEY({search_keywords})"
+            query += f"&date=1950-{year}&sort=relevance"
+            query += "&start=%d" % (start)
             r = requests.get(url + query, headers=headers, timeout=30)
-            if 'entry' in r.json()['search-results']:
-                if 'error' in r.json()['search-results']['entry'][0]:
+            if "entry" in r.json()["search-results"]:
+                if "error" in r.json()["search-results"]["entry"][0]:
                     continue
                 else:
-                    entries += r.json()['search-results']['entry']
+                    entries += r.json()["search-results"]["entry"]
             if len(entries) != 0:
                 all_entries.extend(entries)
             else:
@@ -149,13 +153,13 @@ def wrapper(api_key, keywords, year):
     articles_loaded = create_article_dataframe(all_entries)
     return articles_loaded
 
+
 if __name__ == "__main__":
-
     YEAR, API_KEY, KEYWORDS = get_arguments()
-
     print(f"Current year is set to {YEAR}")
     file_name = "_".join(KEYWORDS)
     articles_extracted = wrapper(API_KEY, KEYWORDS, YEAR)
-    articles_extracted.to_csv(f'../data/Results_{file_name}.csv',
-                    sep=',', encoding='utf-8')
-    print(f'Extraction for {KEYWORDS} completed')
+    articles_extracted.to_csv(
+        f"../data/Results_{file_name}.csv", sep=",", encoding="utf-8"
+    )
+    print(f"Extraction for {KEYWORDS} completed")
