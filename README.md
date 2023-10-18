@@ -37,7 +37,7 @@ specifying the DOI of the article. Abstracts for all SCOPUS database articles ar
 2. Install the package
 
    ```sh
-   pip install -i https://test.pypi.org/simple/ scopus-caller==0.1
+   pip install scopus-caller
    ```
 
 ## Obtain the API Key
