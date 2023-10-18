@@ -7,4 +7,5 @@ lint:
 format:
 	black *.py
 
-test:	python scopuscaller/test_call_scopus.py
+test:	
+	python scopuscaller/test_call_scopus.py

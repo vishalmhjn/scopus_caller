@@ -1,6 +1,6 @@
 import os
 import unittest
-import scopuscaller.call_scopus as sc
+import call_scopus as sc
 
 API_KEY = os.environ["API_KEY"]
 
