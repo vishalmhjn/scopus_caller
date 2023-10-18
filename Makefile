@@ -9,4 +9,4 @@ format:
 	black *.py
 
 test:
-	python tests/test_call_scopus.py
+	python scopuscaller/test_call_scopus.py
