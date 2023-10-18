@@ -21,10 +21,6 @@
 
 import pandas as pd
 import requests
-import argparse
-from datetime import datetime
-
-API_FILE = "../input/.API"
 
 
 def create_article_dataframe(allentries):
@@ -87,84 +83,54 @@ def create_article_dataframe(allentries):
     return articles
 
 
-def get_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--year",
-        default=-1,
-        type=int,
-        help="Year to search for in Scopus (default: current year)",
-    )
-    parser.add_argument(
-        "--api",
-        default="",
-        type=str,
-        help="API key to use for Scopus (default: read from file)",
-    )
-    parser.add_argument("keywords", nargs="+", help="Keywords to search for in Scopus")
-    args = parser.parse_args()
+def get_titles(api_key, keywords, year=2023):
+    """
+    Retrieve academic articles from Scopus based on specified keywords and publication year.
 
-    # Get year
-    if args.year > 0:
-        year = args.year
-    else:
-        year = datetime.now().year
+    Parameters:
+    - api_key (str): Your Elsevier API key for authentication.
+    - keywords (list of str): Keywords to search for in article titles and abstracts.
+    - year (int, optional): The publication year to filter the articles. Default is 2023.
 
-    # Get API key
-    if args.api != "":
-        api_key = args.api
-    else:
-        api_key = open(API_FILE, "rb").readline().rstrip()
+    Returns:
+    - pd.DataFrame: A DataFrame containing the retrieved academic articles.
+    """
 
-    return year, api_key, args.keywords
-
-
-def wrapper(api_key, keywords, year):
-    url = "https://api.elsevier.com/content/search/scopus"
+    # Define the base URL and headers
+    base_url = "https://api.elsevier.com/content/search/scopus"
     headers = {"X-ELS-APIKey": api_key}
+
+    # Construct the search query
     search_keywords = " AND ".join(f'"{w}"' for w in keywords)
-    print(search_keywords)
-    query = f"?query=TITLE-ABS-KEY({search_keywords})"
-    query += f"&date=1950-{year}"
-    query += "&sort=relevance"
-    query += "&start=0"
-    r = requests.get(url + query, headers=headers, timeout=20)
-    result_len = int(r.json()["search-results"]["opensearch:totalResults"])
-    print(result_len)
+    query = f"?query=TITLE-ABS-KEY({search_keywords})&date=1950-{year}&sort=relevance&start=0"
+
+    # Send the initial request to get the total result count
+    response = requests.get(base_url + query, headers=headers, timeout=20)
+    result_len = int(response.json()["search-results"]["opensearch:totalResults"])
+
+    # Initialize a list to store all entries
     all_entries = []
 
     for start in range(0, result_len, 25):
-        if start < 5000:  # Scopus throws an error above this value
-            entries = []
-            # query = '?query={'+first_term+'}+AND+{'+second_term+'}' #Enter the keyword inside the braces for exact phrase match
-            # Enter the keyword inside the double quotations for approximate phrase match
-            query = f"?query=TITLE-ABS-KEY({search_keywords})"
-            query += f"&date=1950-{year}&sort=relevance"
-            # query += '&subj=ENGI' # This is commented because many results might not be covered under ENGI
-            query += "&start=%d" % (start)
-            # query += '&count=%d' % (count)
-            
-            r = requests.get(url + query, headers=headers, timeout=30)
-            if "entry" in r.json()["search-results"]:
-                if "error" in r.json()["search-results"]["entry"][0]:
-                    continue
-                else:
-                    entries += r.json()["search-results"]["entry"]
-            if len(entries) != 0:
-                all_entries.extend(entries)
+        if start >= 5000:  # Scopus throws an error above this value
+            break
+
+        # Construct the query with pagination
+        query = f"?query=TITLE-ABS-KEY({search_keywords})&date=1950-{year}&sort=relevance&start={start}"
+
+        # Send the request for the current page
+        response = requests.get(base_url + query, headers=headers, timeout=30)
+
+        if "entry" in response.json()["search-results"]:
+            if "error" in response.json()["search-results"]["entry"][0]:
+                continue
             else:
-                break
-    articles_loaded = pd.DataFrame()
+                all_entries.extend(response.json()["search-results"]["entry"])
+        else:
+            break
+
+    # Create a DataFrame from the collected entries
     articles_loaded = create_article_dataframe(all_entries)
+
+    print(f"Extraction for {keywords} completed")
     return articles_loaded
-
-
-if __name__ == "__main__":
-    YEAR, API_KEY, KEYWORDS = get_arguments()
-    print(f"Current year is set to {YEAR}")
-    file_name = "_".join(KEYWORDS)
-    articles_extracted = wrapper(API_KEY, KEYWORDS, YEAR)
-    articles_extracted.to_csv(
-        f"../data/Results_{file_name}.csv", sep=",", encoding="utf-8"
-    )
-    print(f"Extraction for {KEYWORDS} completed")

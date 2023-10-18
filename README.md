@@ -20,9 +20,9 @@ access level of the article and authorized API, the article's **abstract-text** 
 ### Semantic Scholar API
 
 Semantic Scholar also provides an API to retrieve the article's meta-data. It is possible to obtain abstracts by
-specifying the DOI of the article.
+specifying the DOI of the article. Abstracts for all SCOPUS database articles are not available from Semantic Scholar database.
 
-## Install the dependencies
+## Installation
 
 1. Create a virtual environment to install all packages in and activate the environment:  
    _(Make sure you are in the parrent folder of this project)_
@@ -34,89 +34,55 @@ specifying the DOI of the article.
    source ~/.scopus-caller/bin/activate
    ```
 
-2. Now install all the neccessary requirements for this project using one of the following two options:
+2. Install the package
 
    ```sh
-   pip install -r requirements.txt
+   pip install -i https://test.pypi.org/simple/ scopus-caller==0.1
    ```
 
-   OR
+## Obtain the API Key
 
-   ```sh
-   make install
-   ```
-
-## Add the API_KEY
-
-1. Create a new file for the api key:
-
-   ```sh
-   touch input/.API
-   ```
-
-2. If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to
+1. If you haven't created an account on [SCOPUS](https://dev.elsevier.com) yet, got to
    [SCOPUS](https://www.elsevier.com/solutions/scopus) and create a private account or one via your university.
-3. After being logged in, create a new API key [here](https://dev.elsevier.com/apikey/manage), name the label to your
+2. After being logged in, create a new API key [here](https://dev.elsevier.com/apikey/manage), name the label to your
    likings and leave the website input field empty _(it is not important)_.  
    Carefully read and understand the "API
    SERVICE AGREEMENT" and "Text and Data Mining (TDM) Provisions", before using the API and the retrieved data. These
    will be presented to the user while generating the API.
-4. Paste your newly generated `api_key` to the created `.API` file in the `input` folder _(input/.API)_.
+3. Copy you API key and store it in a text file.
 
-## Unrestricted search using CLI
+## Usage
 
-First make sure you are in the `scopus_caller/src` folder then run:
+Import the library and paste the API key.
 
 ```sh
-python call_scopus.py [--year YEAR] [--api API_KEY] [SEARCH_TERMS]
+# import the module
+import scopus_caller as sc
+
+# paste the api here
+api_key = ""
 ```
 
-**Parameters**:
+**Parameters of function _call_scopus.py_**:
 
-- `--year` (Optional):
-  The upper bound of publication year for searching. If not specified, the current year will be used.
-- `--api` (Optional):
-  The API key to use. If not specified, the API key in the `input/.API` file will be used.
-- `SEARCH_TERMS`: The search terms to use.
-  Separate multiple search terms with spaces.
-  ❗ When a search term has a space (e.g., "machine learning"), use **double quotations** to enclose it (safety "machine learning")
+Parameters:
+
+- api_key (str): Your Elsevier API key for authentication.
+- keywords (list of str): Keywords to search for in article titles and abstracts.
+- year (int, optional): The publication year to filter the articles. Default is 2023.
 
 **Example**:
 
 The following command will search for articles with the search terms `transportation`, `road safety` and `machine learning` published before 2023 (inclusive).
 
 ```sh
-python call_scopus.py --year 2023 transportation "road safety" "machine learning"
+# Obtain the articles
+df = sc.get_titles(api_key, ["transportation", "road safety", "transfer learning"], 2023)
+
+# Obtain the abstracts of the above articles. For abstracts, you need to specify the output of previous step as input and then run the following
+
+df = sc.get_abstracts(df)
 ```
-
-## Abstracts
-
-For abstracts, you need to specify the output of previous step as input and then run the following
-
-```sh
-python call_semanticscholar.py path/to/scopus/results.csv
-```
-
-The results of the query are stored in the `scopus_caller/data` folder as a csv file with prefix **abstract**, followed by the same name as input file.
-
-Abstracts for all SCOPUS database articles are not available from Semantic Scholar database.
-
-## Using Keywords
-
-Here we read a set of keywords from a dataframe with two columns and then search exhaustively using combinations of the words from the first column with the words from the second column. This helps reduce the manual effort in case you have many words to search with. Currently, it is hard coded with a dataframe with two columns, but it can be made flexible. Please open a PR if someone is interested in doing this.
-
-In the `input/keywords.csv` add you two search terms and replace the placeholders.
-First make sure you are in the `scopus_caller/src` folder then run:
-
-```sh
-python keyword_scrapper.py ../data/keywords.csv
-```
-
-The terms in each column should be unique keywords and need not be repeated. There can different number of keywords in each column. This code will iterate over column 1 (outer loop) and then iterate over column 2 (innner loop).
-
-## Other settings
-
-You can change the specifics of the search in call_scopus such as connecting string by `OR` or `AND`, etc.
 
 ## Citing
 

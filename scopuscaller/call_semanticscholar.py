@@ -1,8 +1,9 @@
 import aiohttp
 import asyncio
-import sys
-import pandas as pd
 from random import choice
+import nest_asyncio
+
+nest_asyncio.apply()
 
 desktop_agents = [""]
 BASE_API_URL = "http://api.semanticscholar.org/v1/paper/"
@@ -46,19 +47,35 @@ async def fetch_articles_async(df):
     return list_abstracts, list_topics
 
 
-if __name__ == "__main__":
-    df = pd.read_csv(sys.argv[1])
+def get_abstracts(df):
+    """
+    Retrieve abstracts and topics for academic articles in a DataFrame.
 
+    Parameters:
+    - df (pd.DataFrame): The DataFrame containing academic articles.
+
+    Returns:
+    - pd.DataFrame: A DataFrame with abstracts and topics added.
+    """
+
+    # Print the total number of articles in the DataFrame
     print(f"Total articles: {len(df)}")
 
+    # Filter out articles with no DOI
     df = df[df.doi != "No Doi"]
+
+    # Print the number of articles with abstracts
     print(f"Articles with abstracts: {len(df)}")
 
+    # Run the asyncio event loop to fetch abstracts and topics asynchronously
     loop = asyncio.get_event_loop()
     list_abstracts, list_topics = loop.run_until_complete(fetch_articles_async(df))
 
+    # Add abstracts and topics to the DataFrame
     df["abstract"] = list_abstracts
     df["topics"] = list_topics
 
-    output_file = "../data/abstracts_" + sys.argv[1].split("/")[-1][:-4] + ".csv"
-    df.to_csv(output_file, index=None)
+    # Print a message indicating that the process is complete
+    print(f"Done")
+
+    return df
