@@ -44,7 +44,7 @@ async def fetch_articles_async(df):
         try:
             list_abstracts.append(content["abstract"])
             list_topics.append(content["topics"])
-        except:
+        except Exception:
             list_abstracts.append("None")
             list_topics.append("None")
 
@@ -80,6 +80,6 @@ def get_abstracts(df):
     df["topics"] = list_topics
 
     # Print a message indicating that the process is complete
-    print(f"Done")
+    print("Done")
 
     return df

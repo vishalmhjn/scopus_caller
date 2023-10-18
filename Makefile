@@ -4,7 +4,6 @@ install:
 
 lint:
 	pylint --disable=R,C scopuscaller/call_scopus.py
-	pylint --disable=R,C scopuscaller/call_semanticscholar.py
 
 format:
 	black *.py
