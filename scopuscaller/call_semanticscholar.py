@@ -28,7 +28,7 @@ async def call_api_async(session, doi):
 
 async def fetch_articles_async(df):
     timeout = aiohttp.ClientTimeout(total=10 * 60)
-    connector = aiohttp.TCPConnector(limit=5)
+    connector = aiohttp.TCPConnector(limit=1)
 
     list_doi = list(df["doi"])
     list_abstracts = []
@@ -38,11 +38,15 @@ async def fetch_articles_async(df):
         connector=connector, headers=random_headers(), timeout=timeout
     ) as session:  #
         tasks = [call_api_async(session, doi) for doi in list_doi]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        results = await asyncio.gather(*tasks, return_exceptions=False)
 
     for content in results:
-        list_abstracts.append(content["abstract"])
-        list_topics.append(content["topics"])
+        try:
+            list_abstracts.append(content["abstract"])
+            list_topics.append(content["topics"])
+        except:
+            list_abstracts.append("None")
+            list_topics.append("None")
 
     return list_abstracts, list_topics
 
@@ -64,12 +68,12 @@ def get_abstracts(df):
     # Filter out articles with no DOI
     df = df[df.doi != "No Doi"]
 
-    # Print the number of articles with abstracts
-    print(f"Articles with abstracts: {len(df)}")
-
     # Run the asyncio event loop to fetch abstracts and topics asynchronously
     loop = asyncio.get_event_loop()
     list_abstracts, list_topics = loop.run_until_complete(fetch_articles_async(df))
+
+    # Print the number of articles with abstracts
+    print(f"Articles with abstracts: {len(list_abstracts)}")
 
     # Add abstracts and topics to the DataFrame
     df["abstract"] = list_abstracts

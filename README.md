@@ -53,11 +53,11 @@ specifying the DOI of the article. Abstracts for all SCOPUS database articles ar
 
 ## Usage
 
-Import the library and paste the API key.
+Import the library and paste the API key. Then run the following code in **Python3** terminal or Jupyter notebook.
 
 ```sh
 # import the module
-import scopus_caller as sc
+import scopuscaller as sc
 
 # paste the api here
 api_key = ""

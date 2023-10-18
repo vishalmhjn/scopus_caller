@@ -1,6 +1,10 @@
+install:
+	pip install --upgrade pip &&\
+		pip install -r requirements.txt
+
 lint:
-	pylint --disable=R,C scopus_caller/call_scopus.py
-	pylint --disable=R,C scopus_caller/call_semanticscholar.py
+	pylint --disable=R,C scopuscaller/call_scopus.py
+	pylint --disable=R,C scopuscaller/call_semanticscholar.py
 
 format:
 	black *.py
