@@ -25,13 +25,13 @@ specifying the DOI of the article. Abstracts for all SCOPUS database articles ar
 ## Installation
 
 1. Create a virtual environment to install all packages in and activate the environment:  
-   _(Make sure you are in the parrent folder of this project)_
+   _(Make sure you are in the parent folder of this project)_
 
    ```sh
-   # crate an environment called venv in this project
-   python3 -m venv ~/.scopus-caller
+   # create an environment called scopuscaller in this project
+   python3 -m venv ~/.scopuscaller
    # activate the environment
-   source ~/.scopus-caller/bin/activate
+   source ~/.scopuscaller/bin/activate
    ```
 
 2. Install the package
@@ -63,13 +63,13 @@ import scopuscaller as sc
 api_key = ""
 ```
 
-**Parameters of function get_titles.py_**:
+**Parameters of function get*titles.py***:
 
 Parameters:
 
 - api_key (str): Your Elsevier API key for authentication.
 - keywords (list of str): Keywords to search for in article titles and abstracts.
-- year (int, optional): The publication year to filter the articles. Default is 2023.
+- year (int, optional): The cut-off year, upto which articles which be retrieved. Default is 2023.
 
 **Example**:
 
