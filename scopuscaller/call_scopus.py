@@ -105,7 +105,7 @@ def get_titles(api_key, keywords, year=2023):
     query = f"?query=TITLE-ABS-KEY({search_keywords})&date=1950-{year}&sort=relevance&start=0"
 
     # Send the initial request to get the total result count
-    response = requests.get(base_url + query, headers=headers, timeout=20)
+    response = requests.get(base_url + query, headers=headers, timeout=120)
     result_len = int(response.json()["search-results"]["opensearch:totalResults"])
 
     # Initialize a list to store all entries
