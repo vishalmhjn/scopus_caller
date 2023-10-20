@@ -63,7 +63,7 @@ import scopuscaller as sc
 api_key = ""
 ```
 
-**Parameters of function _call_scopus.py_**:
+**Parameters of function get_titles.py_**:
 
 Parameters:
 
@@ -73,7 +73,7 @@ Parameters:
 
 **Example**:
 
-The following command will search for articles with the search terms `transportation`, `road safety` and `machine learning` published before 2023 (inclusive).
+The following command will search for articles with the search terms `transportation`, `road safety` and `transfer learning` published before 2023 (inclusive).
 
 ```sh
 # Obtain the articles
