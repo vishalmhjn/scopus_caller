@@ -63,7 +63,7 @@ import scopuscaller as sc
 api_key = ""
 ```
 
-**Parameters of function get*titles.py***:
+**Parameters of function _get_titles.py_**:
 
 Parameters:
 
