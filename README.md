@@ -24,8 +24,7 @@ specifying the DOI of the article. Abstracts for all SCOPUS database articles ar
 
 ## Installation
 
-1. Create a virtual environment to install all packages in and activate the environment:  
-   _(Make sure you are in the parent folder of this project)_
+1. Create a virtual environment to install all packages in and activate the environment:
 
    ```sh
    # create an environment called scopuscaller in this project
